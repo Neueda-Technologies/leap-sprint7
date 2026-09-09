@@ -9,12 +9,16 @@ mission brief promised in Week 1.
 
 Both data sources need to already exist:
 
+Replace `PRIVATE_IP` in `dashboard.py` with your own Linux machine private IP address.
+
 ```bash
 # Postgres warehouse table (Module 7's loader)
 docker start sprint7-postgres
 
-# Kafka broker + topic (Module 5/9)
-docker start kafka-sprint7
+# Kafka broker + topic (Module 5/9) is on the remote Linux host.
+# Optional quick check on Linux:
+# docker exec kafka /opt/kafka/bin/kafka-topics.sh --describe \
+#   --topic trade-events --bootstrap-server localhost:9092
 ```
 
 ```bash

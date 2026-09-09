@@ -7,13 +7,13 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-// KATA: send 5 settlement events to the "settlement-events" topic on your
-// own running Kafka broker (localhost:9092), keyed by account ID.
+// KATA: send 5 settlement events to the "settlement-events" topic on the
+// remote Linux Kafka broker (PRIVATE_IP:9092), keyed by account ID.
 public class SimpleProducer {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         // TODO 1: build a Properties object with:
-        //   bootstrap.servers = localhost:9092
+        //   bootstrap.servers = PRIVATE_IP:9092
         //   key.serializer / value.serializer = StringSerializer
         Properties props = new Properties();
 

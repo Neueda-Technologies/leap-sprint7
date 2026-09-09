@@ -14,8 +14,9 @@ import java.util.concurrent.ExecutionException;
 public class SimpleProducer {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        // Remote Linux broker advertised address.
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", "PRIVATE_IP:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
@@ -31,6 +32,7 @@ public class SimpleProducer {
             for (String[] trade : trades) {
                 String ticker = trade[0];
                 String value = trade[1];
+                // Topic name, record key (ticker), and payload.
                 ProducerRecord<String, String> record =
                         new ProducerRecord<>("trade-events", ticker, value);
 

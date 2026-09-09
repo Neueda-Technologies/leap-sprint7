@@ -11,17 +11,30 @@ By the end of this lab you will have:
 
 ## Setup
 
-Stand up your own broker (skip if you already have `kafka-sprint7` running from the demo and
-just want to reuse it):
+Stand up the broker on the Linux host (skip if the demo broker is already running there):
+
+Replace `PRIVATE_IP` with your own Linux machine private IP address in the commands below.
 
 ```bash
-docker run -d --name kafka-sprint7 -p 9092:9092 apache/kafka:latest
+docker run -d --name kafka -p PRIVATE_IP:9092:9092 \
+  -e KAFKA_NODE_ID=1 \
+  -e KAFKA_PROCESS_ROLES=broker,controller \
+  -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \
+  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://PRIVATE_IP:9092 \
+  -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT \
+  -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER \
+  -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9093 \
+  -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT \
+  -e CLUSTER_ID=4L6g3nShT-eMCtK--X86sw \
+  apache/kafka:latest
 ```
+
+Run these topic commands on the Linux host too:
 
 Create the topic this lab uses:
 
 ```bash
-docker exec kafka-sprint7 /opt/kafka/bin/kafka-topics.sh --create \
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --create \
   --topic settlement-events --bootstrap-server localhost:9092 \
   --partitions 3 --replication-factor 1
 ```
@@ -29,9 +42,11 @@ docker exec kafka-sprint7 /opt/kafka/bin/kafka-topics.sh --create \
 Confirm it exists:
 
 ```bash
-docker exec kafka-sprint7 /opt/kafka/bin/kafka-topics.sh --describe \
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --describe \
   --topic settlement-events --bootstrap-server localhost:9092
 ```
+
+Run the Java commands in this lab from Windows.
 
 ## The Scenario
 

@@ -12,8 +12,16 @@ By the end of this lab you will have:
 
 Both data sources need to already exist — reuse the demo's:
 
+Replace `PRIVATE_IP` in `dashboard.py` with your own Linux machine private IP address.
+
 ```bash
-docker start sprint7-postgres kafka-sprint7
+# Local Postgres on Windows
+docker start sprint7-postgres
+
+# Remote Kafka runs on Linux (optional check on Linux host):
+# docker exec kafka /opt/kafka/bin/kafka-topics.sh --describe \
+#   --topic trade-events --bootstrap-server localhost:9092
+
 pip install -r requirements.txt
 ```
 

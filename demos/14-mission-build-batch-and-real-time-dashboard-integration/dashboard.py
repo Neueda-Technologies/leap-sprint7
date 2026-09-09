@@ -32,7 +32,7 @@ import psycopg2
 from kafka import KafkaConsumer
 
 POSTGRES_DSN = "dbname=sprint7 user=postgres password=leappass host=localhost port=5434"
-KAFKA_BOOTSTRAP = "localhost:9092"
+KAFKA_BOOTSTRAP = "PRIVATE_IP:9092"
 KAFKA_TOPIC = "trade-events"
 STREAM_POLL_SECONDS = 5
 

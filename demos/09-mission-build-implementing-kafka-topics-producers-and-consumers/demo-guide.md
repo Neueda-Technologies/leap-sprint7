@@ -5,13 +5,19 @@ now real code, publishing from something that stands in for the mission service 
 
 ## Setup
 
-Reuse `kafka-sprint7` (from Module 5), and make sure `trade-events` exists with 3 partitions
-(created in Module 5/6):
+Reuse the remote Linux Kafka broker from Module 5, and make sure `trade-events` exists with
+3 partitions (created in Module 5/6).
+
+Replace `PRIVATE_IP` in this module's Java code with your own Linux machine private IP address.
+
+Run this on the Linux host:
 
 ```bash
-docker exec kafka-sprint7 /opt/kafka/bin/kafka-topics.sh --describe \
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --describe \
   --topic trade-events --bootstrap-server localhost:9092
 ```
+
+Run the Java build/run commands on Windows from this module folder:
 
 ```bash
 mvn compile

@@ -16,8 +16,19 @@ By the end of this lab you will have:
 
 ## Setup
 
-Reuse `kafka-sprint7` and the `trade-events` topic from the demo (run the demo's `OrderService`
-first if you haven't, so there's data on the topic to consume):
+Reuse the remote Linux Kafka broker and the `trade-events` topic from the demo (run the demo's
+`OrderService` first if you haven't, so there's data on the topic to consume).
+
+Replace `PRIVATE_IP` in this module's Java code with your own Linux machine private IP address.
+
+Optional quick check on the Linux host:
+
+```bash
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --describe \
+   --topic trade-events --bootstrap-server localhost:9092
+```
+
+Run the build/run commands below on Windows:
 
 ```bash
 mvn compile

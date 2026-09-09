@@ -14,7 +14,7 @@ public class SimpleConsumer {
 
     public static void main(String[] args) {
         // TODO 1: build a Properties object with:
-        //   bootstrap.servers = localhost:9092
+        //   bootstrap.servers = PRIVATE_IP:9092
         //   key.deserializer / value.deserializer = StringDeserializer
         //   group.id = settlement-events-lab-consumer
         //   auto.offset.reset = earliest

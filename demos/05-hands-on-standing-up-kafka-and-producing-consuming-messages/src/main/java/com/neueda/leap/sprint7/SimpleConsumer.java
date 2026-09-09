@@ -3,6 +3,7 @@ package com.neueda.leap.sprint7;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
 import java.util.List;
@@ -13,22 +14,25 @@ import java.util.Properties;
 public class SimpleConsumer {
 
     public static void main(String[] args) {
+        String topic = "trade-events";
+
+        // Same remote Linux broker used by the producer.
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", "PRIVATE_IP:9092");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        // group.id: this consumer's OWN tracked position. A different
-        // group.id would re-read every message from the start - the same
-        // "who tracks the offset" idea from Module 4, now backed by a
-        // real broker instead of our own bookkeeping.
-        props.put("group.id", "trade-events-demo-consumer");
-        props.put("auto.offset.reset", "earliest");
+        props.put("enable.auto.commit", "false");
 
         try (KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props)) {
-            consumer.subscribe(List.of("trade-events"));
+            // Keep the demo deterministic: read directly from partition 0.
+            List<TopicPartition> partitions = List.of(new TopicPartition(topic, 0));
+            consumer.assign(partitions);
+            // Replay from the beginning each run so messages are always visible.
+            consumer.seekToBeginning(partitions);
 
-            System.out.println("Consumer polling for up to 10 seconds...");
-            long deadline = System.currentTimeMillis() + 10_000;
+            System.out.println("Assigned partitions=" + partitions);
+            System.out.println("Consumer polling for up to 30 seconds...");
+            long deadline = System.currentTimeMillis() + 30_000;
             int received = 0;
             while (System.currentTimeMillis() < deadline) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(500));

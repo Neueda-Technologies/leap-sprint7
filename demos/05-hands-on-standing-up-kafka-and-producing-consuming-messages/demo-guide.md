@@ -1,73 +1,76 @@
-# Module 5 Demo Guide — Hands-on: Standing Up Kafka & Producing/Consuming Messages
+# Module 5 Demo Guide - Remote Kafka + Java Producer/Consumer
 
-Module 4's concepts, against a real broker for the first time. Same vocabulary — topic,
-partition, offset, producer, consumer — now backed by real infrastructure instead of an in-memory
-stand-in.
+This is a minimal, reliable demo using one Kafka broker running in Docker on a remote Linux machine.
+The Java code in this project connects to that remote broker at PRIVATE_IP:9092.
 
-## Stand Up Kafka
+## 1) Launch Kafka on the Linux Machine
+
+Run this on the Linux host (replace PRIVATE_IP with your Linux machine private IP address):
 
 ```bash
-docker run -d --name kafka-sprint7 -p 9092:9092 apache/kafka:latest
+docker run -d --name kafka -p PRIVATE_IP:9092:9092 \
+  -e KAFKA_NODE_ID=1 \
+  -e KAFKA_PROCESS_ROLES=broker,controller \
+  -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \
+  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://PRIVATE_IP:9092 \
+  -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT \
+  -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER \
+  -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9093 \
+  -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT \
+  -e CLUSTER_ID=4L6g3nShT-eMCtK--X86sw \
+  apache/kafka:latest
 ```
 
-The official `apache/kafka` image runs in **KRaft mode** — no separate ZooKeeper container
-needed, unlike older Kafka setups the group may have seen referenced elsewhere. One container,
-one broker, ready on `localhost:9092`.
-
-## Create the Topic
+Optional quick checks on Linux:
 
 ```bash
-docker exec kafka-sprint7 /opt/kafka/bin/kafka-topics.sh --create \
+docker ps
+docker logs kafka --tail 50
+```
+
+Topic creation:
+
+- Kafka can auto-create a topic on first produce/consume if `auto.create.topics.enable=true`.
+- For this demo, creating the topic explicitly is recommended because it guarantees the name and partition count.
+
+Create the demo topic once (recommended):
+
+```bash
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --create \
   --topic trade-events --bootstrap-server localhost:9092 \
-  --partitions 3 --replication-factor 1
-
-docker exec kafka-sprint7 /opt/kafka/bin/kafka-topics.sh --describe \
-  --topic trade-events --bootstrap-server localhost:9092
+  --partitions 1 --replication-factor 1
 ```
 
-Point at the `--describe` output: three partitions, each with a leader — this is Module 4's
-"anatomy of a topic" diagram, as a real, running thing instead of a picture.
+If the topic already exists, that is fine.
 
-## Run the Producer
+## 2) Run the Java Demo from This Project (Windows)
 
-```bash
-mvn compile
-mvn dependency:build-classpath -Dmdep.outputFile=cp.txt
-java -cp "target/classes;$(cat cp.txt)" com.neueda.leap.sprint7.SimpleProducer
+From this project folder:
+
+```powershell
+mvn -q -DskipTests compile
 ```
 
-Point at the output: `partition=0 offset=0`, `partition=1 offset=0`, and so on — **the broker
-assigned these**, not our own code (contrast directly with Module 4's `Math.floorMod` running
-locally). `producer.send(record).get()` blocks until the broker acknowledges the write — worth
-naming explicitly as a design choice (fire-and-forget vs waiting for acknowledgment is a real,
-consequential setting in a production producer).
+Run producer:
 
-## Run the Consumer
-
-```bash
-java -cp "target/classes;$(cat cp.txt)" com.neueda.leap.sprint7.SimpleConsumer
+```powershell
+mvn -q exec:java "-Dexec.mainClass=com.neueda.leap.sprint7.SimpleProducer"
 ```
 
-**Compare the output directly against Module 4's prediction**: AAPL's events (partition 0,
-offsets 0 then 1) arrive in production order — BUY, then SELL. VOD.L's events (partition 1,
-offsets 0 then 1) arrive in production order too. The ordering guarantee from Module 4 isn't a
-theory anymore — it just happened, against a real broker, in this room.
+Run consumer:
 
-## `group.id`: Point at It Directly
-
-```java
-props.put("group.id", "trade-events-demo-consumer");
+```powershell
+mvn -q exec:java "-Dexec.mainClass=com.neueda.leap.sprint7.SimpleConsumer"
 ```
 
-Run the consumer a second time immediately. **Nothing new arrives** (the deadline hits with 0
-events) — because this consumer group has already committed past offset 2 in partition 0 and
-offset 1 in partition 1. Change `group.id` to something new and rerun: **all 5 events arrive
-again**, from the beginning. This is Module 4's "who tracks the offset" question, answered
-concretely: the broker tracks each consumer group's committed offset, and a new group starts with
-no history at all.
+Notes:
 
-## Transition to the Lab
+- In PowerShell, keep `-Dexec.mainClass=...` inside quotes.
+- Producer should print sent records with partition/offset.
+- Consumer should print received records from `trade-events`.
 
-Learners stand up their own Kafka container, create their own topic, and write their own minimal
-producer/consumer pair — verified the same way this demo was: real broker, real partition
-assignment, real ordering.
+## Current Demo Behavior
+
+- Producer sends 5 trade messages to topic `trade-events`.
+- Consumer manually reads partition `0` and seeks to the beginning.
+- Because it seeks to beginning, rerunning consumer can show older messages too.
