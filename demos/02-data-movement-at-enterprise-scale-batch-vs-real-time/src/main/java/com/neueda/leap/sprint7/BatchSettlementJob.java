@@ -1,7 +1,8 @@
 package com.neueda.leap.sprint7;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 // BATCH: a bounded, known-size dataset, processed as a single unit, on a
@@ -13,7 +14,7 @@ public class BatchSettlementJob {
     public static void main(String[] args) throws Exception {
         System.out.println("[" + LocalDateTime.now() + "] Batch job started");
 
-        BufferedReader br = new BufferedReader(new FileReader("src/main/resources/trades.csv"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(BatchSettlementJob.class.getClassLoader().getResourceAsStream("trades.csv"), StandardCharsets.UTF_8));
         String line = br.readLine(); // header
         int count = 0;
         double totalValue = 0;

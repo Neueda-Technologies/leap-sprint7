@@ -1,7 +1,8 @@
 package com.neueda.leap.sprint7;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 // This is Module 1's TradeReportGenerator bug, reproduced in miniature: bad
 // rows are caught and silently skipped. No count, no reason, no evidence
@@ -10,7 +11,7 @@ public class SilentDropLoader {
 
     public static void main(String[] args) throws Exception {
         int loaded = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/trades.csv"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(SilentDropLoader.class.getClassLoader().getResourceAsStream("trades.csv"), StandardCharsets.UTF_8))) {
             br.readLine(); // header
             String line;
             while ((line = br.readLine()) != null) {

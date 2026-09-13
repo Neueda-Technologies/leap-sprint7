@@ -1,7 +1,8 @@
 package com.neueda.leap.sprint7;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class ConfirmationQualityCheck {
         List<String[]> valid = new ArrayList<>();
         List<QuarantinedRow> quarantined = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/confirmations.csv"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(ConfirmationQualityCheck.class.getClassLoader().getResourceAsStream("confirmations.csv"), StandardCharsets.UTF_8))) {
             br.readLine(); // header
             String line;
             int lineNumber = 1;
