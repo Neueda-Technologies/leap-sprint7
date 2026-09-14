@@ -14,6 +14,8 @@ Reuse the demo's SonarQube container (`sonarqube-sprint7`) and the `Sprint7 Stri
 in the demo. If you don't have a token yet, generate one: **My Account → Security → Generate
 Token**.
 
+If you have any Sonarqube containers running that you didn't launch, make sure you remove them before running your own. See the demo for instructions on how to launch Sonarqube.
+
 ```bash
 cd labs/12-quality-tooling-and-ci-quality-gates
 mvn compile
@@ -24,7 +26,7 @@ mvn compile
 ### Part A — See It Fail
 
 ```bash
-mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
+mvn sonar:sonar "-Dsonar.host.url=http://PRIVATE_IP:9000" "-Dsonar.token=<your-token>" "-Dsonar.qualitygate.wait=true"
 ```
 
 **Before fixing anything**, note that this fails. Open the SonarQube dashboard for
@@ -59,7 +61,7 @@ A fixed `SettlementReporter.java` that passes the `Sprint7 Strict Gate` with `bu
 
 ## Acceptance criteria
 
-- `mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.qualitygate.wait=true` exits with `BUILD SUCCESS` and
+- `mvn sonar:sonar "-Dsonar.host.url=http://PRIVATE_IP:9000" "-Dsonar.qualitygate.wait=true"` exits with `BUILD SUCCESS` and
   `QUALITY GATE STATUS: PASSED`
 - The SonarQube dashboard for this project shows 0 open bugs and 0 open code smells
 - You can name, for each original issue, which specific change fixed it (not "I changed some

@@ -32,7 +32,21 @@ different core.
 ## Stand Up SonarQube
 
 Docker runs on the Linux VM, so run SonarQube there (same host as your Kafka broker) — port
-9000 is already open on the training VMs. Run the `docker` and `curl` commands below **on the
+9000 is already open on the training VMs. 
+
+First, check that it is not already running. If it is, you will need to terminate any currently running instances.
+
+```
+docker ps
+```
+
+Then if you see a sonarqube container in the list, run the following command to remove it:
+
+```
+docker rm -f FIRST_TWO_CHARACTERS_OF_CONTAINER_ID
+```
+
+Run the `docker` and `curl` commands below **on the
 Linux VM**; open the dashboard and run Maven **from Windows**, using the Linux VM's private IP in
 place of `PRIVATE_IP`.
 
@@ -58,7 +72,7 @@ token: **My Account → Security → Generate Token**.
 ```bash
 cd shared/starter-codebase
 mvn clean test
-mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
+mvn sonar:sonar "-Dsonar.host.url=http://PRIVATE_IP:9000" "-Dsonar.token=<your-token>" "-Dsonar.qualitygate.wait=true"
 ```
 
 Verified real output (against the codebase as Module 11 left it):
