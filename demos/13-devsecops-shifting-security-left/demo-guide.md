@@ -111,7 +111,12 @@ Verified real result: `{}` — zero known vulnerabilities for this version.
 The third category catches something neither SAST nor dependency scanning does: a real
 credential, accidentally committed.
 
+gitleaks runs as a Docker image, so run it **on the Linux VM** (where Docker is) — `<repo-path>`
+is the repo's path on that machine. On Windows, the alternative is the native gitleaks binary
+(`choco install gitleaks`, then `gitleaks detect -v` in the repo), which needs no Docker.
+
 ```bash
+# on the Linux VM
 docker run --rm -v "<repo-path>:/repo" -w /repo zricethezav/gitleaks:latest detect -v
 ```
 

@@ -72,8 +72,11 @@ git -c user.email="you@example.com" -c user.name="You" commit -m "Add PaymentGat
 
 ### Task
 
-1. Run gitleaks against your throwaway repo:
+1. Run gitleaks against your throwaway repo. gitleaks is a Docker image, so run it **on the
+   Linux VM** (`<path-to-secrets-lab>` is the path on that machine); on Windows, use the native
+   binary instead (`choco install gitleaks`, then `gitleaks detect -v`):
    ```bash
+   # on the Linux VM
    docker run --rm -v "<path-to-secrets-lab>:/repo" -w /repo zricethezav/gitleaks:latest detect -v
    ```
    Confirm it finds both secrets.

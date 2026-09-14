@@ -24,7 +24,7 @@ mvn compile
 ### Part A — See It Fail
 
 ```bash
-mvn sonar:sonar -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
+mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
 ```
 
 **Before fixing anything**, note that this fails. Open the SonarQube dashboard for
