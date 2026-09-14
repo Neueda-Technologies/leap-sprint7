@@ -55,7 +55,7 @@ traded one problem for a different one.
 ## Verified final state
 
 ```
-mvn sonar:sonar -Dsonar.token=... -Dsonar.qualitygate.wait=true
+mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=... -Dsonar.qualitygate.wait=true
 ...
 QUALITY GATE STATUS: PASSED
 BUILD SUCCESS

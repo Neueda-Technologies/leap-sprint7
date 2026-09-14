@@ -31,7 +31,13 @@ different core.
 
 ## Stand Up SonarQube
 
+Docker runs on the Linux VM, so run SonarQube there (same host as your Kafka broker) — port
+9000 is already open on the training VMs. Run the `docker` and `curl` commands below **on the
+Linux VM**; open the dashboard and run Maven **from Windows**, using the Linux VM's private IP in
+place of `PRIVATE_IP`.
+
 ```bash
+# on the Linux VM
 docker run -d --name sonarqube-sprint7 -p 9000:9000 sonarqube:community
 ```
 
@@ -43,7 +49,7 @@ fine for training but not how a real broker cluster is usually configured).
 curl -s http://localhost:9000/api/system/status
 ```
 
-Wait for `"status":"UP"`. Log in at `http://localhost:9000` with `admin` / `admin` (it will
+Wait for `"status":"UP"`. From Windows, log in at `http://PRIVATE_IP:9000` with `admin` / `admin` (it will
 prompt you to change the password — for this training instance, that's optional). Generate a
 token: **My Account → Security → Generate Token**.
 
@@ -52,13 +58,13 @@ token: **My Account → Security → Generate Token**.
 ```bash
 cd shared/starter-codebase
 mvn clean test
-mvn sonar:sonar -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
+mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
 ```
 
 Verified real output (against the codebase as Module 11 left it):
 
 ```
-QUALITY GATE STATUS: PASSED - View details on http://localhost:9000/dashboard?id=sprint7-starter-codebase
+QUALITY GATE STATUS: PASSED - View details on http://PRIVATE_IP:9000/dashboard?id=sprint7-starter-codebase
 BUILD SUCCESS
 ```
 
@@ -116,13 +122,13 @@ Assign it to the project: **Project Settings → Quality Gate → Sprint7 Strict
 Rerun the exact same analysis, no code changes:
 
 ```bash
-mvn sonar:sonar -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
+mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=<your-token> -Dsonar.qualitygate.wait=true
 ```
 
 Verified real output:
 
 ```
-QUALITY GATE STATUS: FAILED - View details on http://localhost:9000/dashboard?id=sprint7-starter-codebase
+QUALITY GATE STATUS: FAILED - View details on http://PRIVATE_IP:9000/dashboard?id=sprint7-starter-codebase
 BUILD FAILURE
 [ERROR] Failed to execute goal ... QUALITY GATE STATUS: FAILED
 ```
