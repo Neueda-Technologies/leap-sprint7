@@ -64,7 +64,7 @@ mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=<your-toke
 Verified real output (against the codebase as Module 11 left it):
 
 ```
-QUALITY GATE STATUS: PASSED - View details on http://localhost:9000/dashboard?id=sprint7-starter-codebase
+QUALITY GATE STATUS: PASSED - View details on http://PRIVATE_IP:9000/dashboard?id=sprint7-starter-codebase
 BUILD SUCCESS
 ```
 
@@ -128,7 +128,7 @@ mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.token=<your-toke
 Verified real output:
 
 ```
-QUALITY GATE STATUS: FAILED - View details on http://localhost:9000/dashboard?id=sprint7-starter-codebase
+QUALITY GATE STATUS: FAILED - View details on http://PRIVATE_IP:9000/dashboard?id=sprint7-starter-codebase
 BUILD FAILURE
 [ERROR] Failed to execute goal ... QUALITY GATE STATUS: FAILED
 ```

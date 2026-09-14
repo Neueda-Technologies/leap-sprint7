@@ -112,8 +112,9 @@ The third category catches something neither SAST nor dependency scanning does: 
 credential, accidentally committed.
 
 gitleaks runs as a Docker image, so run it **on the Linux VM** (where Docker is) — `<repo-path>`
-is the repo's path on that machine. On Windows, the alternative is the native gitleaks binary
-(`choco install gitleaks`, then `gitleaks detect -v` in the repo), which needs no Docker.
+is the repo's path on that machine. On Windows, install the native binary (`choco install
+gitleaks`) and run it from inside the repo: `gitleaks detect -v` for the full-history scans, and
+`gitleaks detect --no-git -v` for the working-tree-only scan later in this guide — neither needs Docker.
 
 ```bash
 # on the Linux VM

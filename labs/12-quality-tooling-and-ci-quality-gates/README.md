@@ -59,7 +59,7 @@ A fixed `SettlementReporter.java` that passes the `Sprint7 Strict Gate` with `bu
 
 ## Acceptance criteria
 
-- `mvn sonar:sonar -Dsonar.qualitygate.wait=true` exits with `BUILD SUCCESS` and
+- `mvn sonar:sonar -Dsonar.host.url=http://PRIVATE_IP:9000 -Dsonar.qualitygate.wait=true` exits with `BUILD SUCCESS` and
   `QUALITY GATE STATUS: PASSED`
 - The SonarQube dashboard for this project shows 0 open bugs and 0 open code smells
 - You can name, for each original issue, which specific change fixed it (not "I changed some

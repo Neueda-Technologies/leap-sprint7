@@ -6,7 +6,8 @@ Engineering Excellence**, week 7 of the LEAP graduate programme.
 ## Prerequisites
 
 - Java 21 (JDK) and Maven
-- Docker (for running Kafka locally in Modules 5-9, and SonarQube in Module 12)
+- Docker on the Linux VM (Kafka in Modules 5-9, SonarQube in Module 12, gitleaks in Module 13);
+  Java/Maven run on Windows and connect to it
 - Postgres (the Sprint 3 enterprise schema, reused for batch loading — see `shared/`)
 - Python 3 with `pandas`, `psycopg2-binary`, and `kafka-python` (Module 14's dashboard — see
   `requirements.txt` in that module)
