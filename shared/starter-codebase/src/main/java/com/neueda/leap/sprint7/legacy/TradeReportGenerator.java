@@ -26,7 +26,14 @@ public class TradeReportGenerator {
                 double q = Double.parseDouble(x[2]);
                 double pr = Double.parseDouble(x[3]);
                 double val = q * pr;
-                double fee = FeeCalculator.calculateFee(typ, val);
+                double fee;
+                if (typ.equals("EQUITY")) {
+                    fee = val * 0.001;
+                } else if (typ.equals("BOND")) {
+                    fee = val * 0.0005;
+                } else {
+                    fee = val * 0.0005;
+                }
                 if (tot.containsKey(tkr)) {
                     tot.put(tkr, tot.get(tkr) + val);
                     f.put(tkr, f.get(tkr) + fee);
